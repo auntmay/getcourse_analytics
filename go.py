@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def get_data():
+def get_orders_data():
     file_name = str(input('Введите название файла: '))
     if file_name.endswith('.csv'):
         delim = str(input('Введите разделитель(по умолчанию ","): ')) or ','
@@ -46,7 +46,7 @@ def create_result_df(df_corrected, empty_df):
 
 
 if __name__ == "__main__":
-    df = get_data()
+    df = get_orders_data()
     df_corrected = correct_data(df)
     empty_df = create_empty_df()
     result = create_result_df(df_corrected, empty_df)
