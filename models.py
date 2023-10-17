@@ -50,6 +50,12 @@ class Orders(Base):
     amount = Column(Integer)
     manager = Column(String)
     from_partner = Column(String)
+    utm_source = Column(String)
+    utm_medium = Column(String)
+    utm_campaign = Column(String)
+    utm_content = Column(String)
+    utm_term = Column(String)
+
 
     clients = relationship("Clients", lazy='joined', viewonly=True)
     
