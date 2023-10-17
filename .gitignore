@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+lproj/
+settings.py
 
 # C extensions
 *.so
