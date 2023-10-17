@@ -3,13 +3,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def get_orders_data():
-    file_name = str(input('Введите название файла: '))
+    file_name = str(input('Введите название файла с заказами: '))
     if file_name.endswith('.csv'):
         delim = str(input('Введите разделитель(по умолчанию ","): ')) or ','
         return pd.read_csv(f'{file_name}', delimiter=delim)
     elif file_name.endswith('.xlsx'):
         sheet = str(input('Введите название листа в таблице (по-умолчанию прочитается первый): ')) or 0
         return pd.read_excel(file_name, sheet_name=sheet, parse_dates=True)
+
+
+def get_users_data():
+
+
 
 def correct_data(df):
     df.columns = df.columns.str.lower()
@@ -27,6 +32,9 @@ def create_empty_df():
 
 
 def create_result_df(df_corrected, empty_df):
+
+    users_data = get_users_data()
+
     orders_by_day = df_corrected.groupby('дата создания')['title'].size()
     sum_orders_by_day = df_corrected.groupby('дата создания')['стоимость, rub'].sum()
     payments_by_day = df_corrected[df_corrected['Оплаты'] == 1].groupby('дата создания')['Оплаты'].size()
