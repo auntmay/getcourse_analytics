@@ -9,7 +9,7 @@ class User(Base):
     username = Column(String)
     password = Column(String)
     email = Column(String)
-    phone = Column(Integer)
+    phone = Column(String)
 
     clients = relationship("Clients", lazy='joined')
     
@@ -24,11 +24,11 @@ class Clients(Base):
 
     client_id = Column(Integer, primary_key=True)
     email = Column(String)
-    register_date = Column(Integer)
+    register_date = Column(Date)
     firstname = Column(String)
     lastname = Column(String)
-    phone_number = Column(Integer)
-    date_of_birth = Column(Integer)
+    phone_number = Column(String)
+    date_of_birth = Column(Date)
 
     users = relationship("User", lazy='joined', viewonly=True)
     orders = relationship("Orders", lazy='joined')
@@ -43,8 +43,8 @@ class Orders(Base):
     client_id = Column(Integer, ForeignKey(Clients.client_id), nullable=False, index=True)
 
     order_id = Column(Integer, primary_key=True)
-    date_created = Column(Integer)
-    date_closed = Column(Integer)
+    date_created = Column(Date)
+    date_closed = Column(Date)
     title = Column(String)
     status = Column(String)
     amount = Column(Integer)
