@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class = "row">
+        <div class = "col-6">       <!-- Размер горизонтальной строки--->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                       {{ message }}<br>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class = "row">
+        <div class = "col-6">
+            <h2 >Сервис доступен только зарегистрированным пользователям</h2>
+        </div>
+    </div> 
+    <div class = "row ">
+        <div class="pt-lg-3">
+            <div class = "col-6">
+                <form action = "{{ url_for('user.login') }}" >
+                    <input class="btn btn-primary" type="submit" value="Войти">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="pt-lg-3">
+        <div class = "row">
+            <div class = "col-6">
+                <form action = "{{ url_for('user.register') }}" >
+                    <input class="btn btn-primary" type="submit" value="Зарегистрироваться">
+                </form>
+            </div>    
+        </div>
+    </div>
+{% endblock %}
