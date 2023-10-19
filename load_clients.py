@@ -1,6 +1,8 @@
 from db import db_session
 from models import User, Clients, Orders
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
+
 import csv
 
 def prepare_data(row):
@@ -19,7 +21,11 @@ def save_client(row):
         date_of_birth=row['date_of_birth']
     )
     db_session.add(client)
-    db_session.commit()
+    try:
+        db_session.commit()
+    except SQLAlchemyError:
+        db_session.rollback()
+        raise
 
 def process_row(row):
     row = prepare_data(row)
@@ -31,7 +37,12 @@ def read_csv(filename):
                   'date_of_birth']
         reader = csv.DictReader(f, fields, delimiter=',')
         for row in reader:
-            process_row(row)
+            try:
+                process_row(row)
+            except (TypeError, ValueError) as e:
+                print(f'При обработке возникла ошибка: {e}')
+            except SQLAlchemyError as e:
+                print(f'Ошибка целостности данных: {e}')
 
 if __name__ == '__main__':
     read_csv('fake_users.csv')

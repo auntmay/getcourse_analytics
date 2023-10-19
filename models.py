@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from db import Base, engine
 
@@ -48,13 +48,17 @@ class Orders(Base):
     title = Column(String)
     status = Column(String)
     amount = Column(Integer)
+    tax = Column(Float)
+    earned = Column(Float)
+    currency = Column(String)
     manager = Column(String)
-    from_partner = Column(String)
+    partner_id = Column(String)
     utm_source = Column(String)
     utm_medium = Column(String)
     utm_campaign = Column(String)
     utm_content = Column(String)
     utm_term = Column(String)
+    tags = Column(String)
 
 
     clients = relationship("Clients", lazy='joined', viewonly=True)
