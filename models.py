@@ -42,6 +42,7 @@ class Orders(Base):
     
     client_id = Column(Integer, ForeignKey(Clients.client_id), nullable=False, index=True)
 
+    email = Column(String)
     order_id = Column(Integer, primary_key=True)
     date_created = Column(Date)
     date_closed = Column(Date)

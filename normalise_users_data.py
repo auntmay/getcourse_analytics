@@ -3,7 +3,7 @@ import pandas as pd
 
 def get_data():
     delimiter = str(input('Введите разделитель (по-умолчанию разделитель -- ","): ')) or ','
-    df = pd.read_csv(r'raw_to_normal_data/users_raw.csv', delimiter=delimiter)
+    df = pd.read_csv(r'users_raw.csv', delimiter=delimiter)
     return df
 
 
@@ -35,10 +35,10 @@ def correct_dates(df):
 
 
 def to_result_csv(df):
-    df.to_csv(r'raw_to_normal_data/result.csv', index=False)
+    df.to_csv(r'normalised_users.csv', index=False)
 
 
-def correct_data():
+def normalise_users_data():
 
     df = get_data()
     df = delete_unnecessary_columns(df)
@@ -47,6 +47,6 @@ def correct_data():
     to_result_csv(df)
 
 if __name__ == '__main__':
-    correct_data()
+    normalise_users_data()
 
 

@@ -1,10 +1,30 @@
 from db import db_session
 from models import User, Clients, Orders
 from datetime import datetime
-
+from normalise_orders_data import normalise_orders_data
 from sqlalchemy.exc import SQLAlchemyError
-
+from functools import lru_cache
+import time
 import csv
+
+
+def read_csv(filename):
+    with open(filename, 'r', encoding='utf-8') as f:
+        fields = ['email', 'date_created', 'date_closed',
+        'title', 'status', 'amount',
+        'tax', 'earned', 'currency', 'manager',
+        'partner_id', 'utm_source', 'utm_medium', 'utm_campaign',
+        'utm_content', 'utm_term', 'tags']
+        reader = csv.DictReader(f, fields, delimiter=',')
+        orders_data = []
+        for row_num, row in enumerate(reader, start=1):
+            try:
+                prepare_data(row)
+                orders_data.append(row)
+            except (ValueError, TypeError) as e:
+                save_dataformat_errors(row_num, row, 'Неправильный формат данных: {}', e)
+        return orders_data
+
 
 def prepare_data(row):
     row['date_created'] = datetime.strptime(row['date_created'], '%Y-%m-%d')
@@ -13,53 +33,56 @@ def prepare_data(row):
     row['earned'] = float(row['earned'])
     return row
 
-def save_client(row):
-    order = Orders(
-        client_id=row['client_id'],
-        date_created=row['date_created'],
-        date_closed=row['date_closed'],
-        title=row['title'],
-        status=row['status'],
-        amount=row['amount'],
-        tax=row['tax'],
-        earned=row['earned'],
-        currency=row['currency'],
-        manager=row['manager'],
-        partner_id=row['partner_id'],
-        utm_source=row['utm_source'],
-        utm_medium=row['utm_medium'],
-        utm_campaign=row['utm_campaign'],
-        utm_content=row['utm_content'],
-        utm_term=row['utm_term'],
-        tags=row['tags']
-    )
-    db_session.add(order)
+
+def save_dataformat_errors(row_num, row, error_text, exception):
+    print("*" * 100)
+    print(f'Ошибка в строке #{row_num}')
+    print(error_text.format(exception))
+    print("*" * 100)
+    with open('orders_values_errors.csv', 'a', encoding='utf-8') as f:
+        f.write(f'Ошибка в строке #{row_num}: {row}\nТекст ошибки: {error_text.format(exception)} \n\n')
+
+
+def save_load_errors(num_rows, email):
+    with open('orders_loading_errors.csv', 'a', encoding='utf-8') as f:
+        f.write(f'Ошибка в строке #{num_rows}. Пользователя с адресом эл. почты {email} не существует в базе.')
+
+
+@lru_cache
+def check_if_client_exist(email, num_rows):
     try:
+        client_id = Clients.query.filter(Clients.email == email).first().client_id
+        return client_id
+    except AttributeError:
+        print(f'В строке №{num_rows} возникла ошибка. Не существует пользователя с эл. почтой {email}, которому принадлежит заказ')
+        save_load_errors(num_rows, email)
+        return False
+
+
+def save_orders(prepared_orders_data):
+    orders_list = []
+    for num_rows, row in enumerate(prepared_orders_data, start=1):
+        if check_if_client_exist(row['email'], num_rows):
+            order = {'email':row['email'], 'client_id': check_if_client_exist(row['email'], num_rows), 'date_created':row['date_created'],
+                'date_closed':row['date_closed'], 'title':row['title'], 'status':row['status'],
+                'amount':row['amount'], 'tax':row['tax'], 'earned':row['earned'],
+                'currency':row['currency'], 'manager':row['manager'], 'partner_id':row['partner_id'],
+                'utm_source':row['utm_source'], 'utm_medium':row['utm_medium'], 'utm_campaign':row['utm_campaign'],
+                'utm_content':row['utm_content'], 'utm_term':row['utm_term'], 'tags':row['tags']}
+            orders_list.append(order) 
+        print(num_rows)
+    try:
+        db_session.bulk_insert_mappings(Orders, orders_list)
         db_session.commit()
-    except SQLAlchemyError:
-        db_session.rollback()
-        raise
+    except SQLAlchemyError as e:
+        print(f'При загрузке данных возникла ошибка. Текст ошибки: {e}')
+    except (ValueError, TypeError) as e:
+        print(f'Ошибка типа данных. Текст ошибки: {e}')
 
-
-def process_row(row):
-    row = prepare_data(row)
-    save_client(row)
-
-def read_csv(filename):
-    with open(filename, 'r', encoding='utf-8') as f:
-        fields = ['client_id', 'date_created', 'date_closed',
-        'title', 'status', 'amount',
-        'tax', 'earned', 'currency', 'manager',
-        'partner_id', 'utm_source', 'utm_medium', 'utm_campaign',
-        'utm_content', 'utm_term', 'tags']
-        reader = csv.DictReader(f, fields, delimiter=',')
-        for row in reader:
-            try:
-                process_row(row)
-            except (TypeError, ValueError) as e:
-                print(f'При обработке возникла ошибка: {e}')
-            except SQLAlchemyError as e:
-                print(f'Ошибка целостности данных: {e}')
 
 if __name__ == '__main__':
-    read_csv('fake_orders.csv')
+    # normalise_orders_data()
+    start = time.perf_counter()
+    orders_data = read_csv('normalised_orders.csv')
+    save_orders(orders_data)
+    print(f'Выполнение заняло: {time.perf_counter()-start} секунд.')

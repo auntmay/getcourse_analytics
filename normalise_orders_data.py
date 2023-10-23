@@ -43,10 +43,10 @@ def correct_dates(df):
 
 
 def to_result_csv(df):
-    df.to_csv(r'raw_to_normal_data/result.csv', index=False)
+    df.to_csv(r'normalised_orders.csv', index=False)
 
 
-def correct_data():
+def normalise_orders_data():
 
     df = get_data()
     df = delete_unnecessary_columns(df)
@@ -56,4 +56,4 @@ def correct_data():
 
 
 if __name__ == '__main__':
-    correct_data()
+    normalise_orders_data()
