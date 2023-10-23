@@ -11,18 +11,18 @@ class User(Base):
     email = Column(String)
     phone = Column(String)
 
-    clients = relationship("Clients", lazy='joined')
+    clients = relationship("Client", lazy='joined')
     
     def __repr__(self):
         return f'User id: {self.id}, name: {self.username}'
     
 
-class Clients(Base):
+class Client(Base):
     __tablename__ = 'clients'
     
     user_id = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
 
-    client_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     email = Column(String)
     register_date = Column(Date)
     firstname = Column(String)
@@ -31,19 +31,19 @@ class Clients(Base):
     date_of_birth = Column(Date)
 
     users = relationship("User", lazy='joined', viewonly=True)
-    orders = relationship("Orders", lazy='joined')
+    orders = relationship("Order", lazy='joined')
     
     def __repr__(self):
-        return f'Client id: {self.client_id}, name: {self.firstname}, {self.lastname}'
+        return f'Client id: {self.id}, name: {self.firstname}, {self.lastname}'
     
 
-class Orders(Base):
+class Order(Base):
     __tablename__ = 'orders'
     
-    client_id = Column(Integer, ForeignKey(Clients.client_id), nullable=False, index=True)
+    client_id = Column(Integer, ForeignKey(Client.id), nullable=False, index=True)
 
     email = Column(String)
-    order_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     date_created = Column(Date)
     date_closed = Column(Date)
     title = Column(String)
@@ -62,10 +62,10 @@ class Orders(Base):
     tags = Column(String)
 
 
-    clients = relationship("Clients", lazy='joined', viewonly=True)
+    clients = relationship("Client", lazy='joined', viewonly=True)
     
     def __repr__(self):
-        return f'Order id: {self.order_id}, name: {self.title}, amount: {self.amount}, status: {self.status}'
+        return f'Order id: {self.id}, name: {self.title}, amount: {self.amount}, status: {self.status}'
 
 
 if __name__ == '__main__':

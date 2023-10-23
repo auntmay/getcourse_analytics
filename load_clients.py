@@ -1,5 +1,5 @@
 from db import db_session
-from models import User, Clients, Orders
+from models import User, Client, Order
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
 from normalise_users_data import normalise_users_data
@@ -45,7 +45,7 @@ def save_clients(prepared_clients_data):
                  'date_of_birth':row['date_of_birth']}
         clients_list.append(client)
     try:
-        db_session.bulk_insert_mappings(Clients, clients_list, return_defaults=True)
+        db_session.bulk_insert_mappings(Client, clients_list, return_defaults=True)
         db_session.commit()
     except SQLAlchemyError as e:
         print(f'При загрузке данных возникла ошибка: {e}')

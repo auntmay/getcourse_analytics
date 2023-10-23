@@ -1,5 +1,5 @@
 from db import db_session
-from models import User, Clients, Orders
+from models import User, Client, Order
 from datetime import datetime
 from normalise_orders_data import normalise_orders_data
 from sqlalchemy.exc import SQLAlchemyError
@@ -51,7 +51,7 @@ def save_load_errors(num_rows, email):
 @lru_cache
 def check_if_client_exist(email, num_rows):
     try:
-        client_id = Clients.query.filter(Clients.email == email).first().client_id
+        client_id = Client.query.filter(Client.email == email).first().id
         return client_id
     except AttributeError:
         print(f'В строке №{num_rows} возникла ошибка. Не существует пользователя с эл. почтой {email}, которому принадлежит заказ')
@@ -72,7 +72,7 @@ def save_orders(prepared_orders_data):
             orders_list.append(order) 
         print(num_rows)
     try:
-        db_session.bulk_insert_mappings(Orders, orders_list)
+        db_session.bulk_insert_mappings(Order, orders_list)
         db_session.commit()
     except SQLAlchemyError as e:
         print(f'При загрузке данных возникла ошибка. Текст ошибки: {e}')

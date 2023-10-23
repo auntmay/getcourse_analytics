@@ -3,7 +3,7 @@ import pandas as pd
 
 def get_data():
     delimiter = str(input('Введите разделитель (по-умолчанию разделитель -- ","): ')) or ','
-    df = pd.read_csv(r'users_raw.csv', delimiter=delimiter)
+    df = pd.read_csv(r'users_raw_data.csv', delimiter=delimiter)
     return df
 
 
