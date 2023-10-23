@@ -16,14 +16,14 @@
     </div>
     <div class = "row">
         <div class = "col-6">
-            <h2 >Сервис доступен только зарегистрированным пользователям</h2>
+            <h2 >Выберете дальнейшее действие</h2>
         </div>
     </div> 
     <div class = "row ">
         <div class="pt-lg-3">
             <div class = "col-6">
-                <form action = "{{ url_for('user.login') }}" >
-                    <input class="btn btn-light" type="submit" value="Войти">
+                <form action = "{{ url_for('main_page.upload_file') }}" >
+                    <input class="btn btn-light" type="submit" value="Добавить файлы">
                 </form>
             </div>
         </div>
@@ -31,8 +31,8 @@
     <div class="pt-lg-3">
         <div class = "row">
             <div class = "col-6">
-                <form action = "{{ url_for('user.register') }}" >
-                    <input class="btn btn-light" type="submit" value="Зарегистрироваться">
+                <form action = "{{ url_for('main_page.data_analysis') }}" >
+                    <input class="btn btn-light" type="submit" value="Проанализировать данные из базы">
                 </form>
             </div>    
         </div>
