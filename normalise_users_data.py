@@ -2,8 +2,7 @@ import pandas as pd
 
 
 def get_data():
-    delimiter = str(input('Введите разделитель (по-умолчанию разделитель -- ","): ')) or ','
-    df = pd.read_csv(r'users_raw_data.csv', delimiter=delimiter)
+    df = pd.read_csv(r'fake_clients.csv', delimiter=',')
     return df
 
 
@@ -12,6 +11,12 @@ def delete_unnecessary_columns(df):
     df.columns = df.columns.str.lower()
     df = df[['email', 'создан',  'имя',  'фамилия',  'телефон',
              'дата рождения']]
+    
+    df['user_id'] = 5
+    new_cols = ['user_id', 'email', 'создан',  'имя',  'фамилия',  'телефон',
+             'дата рождения']
+    df = df[new_cols]
+    
     return df
 
 
@@ -35,7 +40,7 @@ def correct_dates(df):
 
 
 def to_result_csv(df):
-    df.to_csv(r'normalised_users.csv', index=False)
+    df.to_csv(r'normalised_clients.csv', index=False, header=False)
 
 
 def normalise_users_data():

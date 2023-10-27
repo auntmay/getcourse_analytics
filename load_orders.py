@@ -45,7 +45,7 @@ def save_dataformat_errors(row_num, row, error_text, exception):
 
 def save_load_errors(num_rows, email):
     with open('orders_loading_errors.csv', 'a', encoding='utf-8') as f:
-        f.write(f'Ошибка в строке #{num_rows}. Пользователя с адресом эл. почты {email} не существует в базе.')
+        f.write(f'Ошибка в строке #{num_rows}. Пользователя с адресом эл. почты {email} не существует в базе.\n', )
 
 
 @lru_cache
@@ -81,8 +81,6 @@ def save_orders(prepared_orders_data):
 
 
 if __name__ == '__main__':
-    # normalise_orders_data()
-    start = time.perf_counter()
+    normalise_orders_data()
     orders_data = read_csv('normalised_orders.csv')
     save_orders(orders_data)
-    print(f'Выполнение заняло: {time.perf_counter()-start} секунд.')

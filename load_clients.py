@@ -53,6 +53,6 @@ def save_clients(prepared_clients_data):
         print(f'Ошибка типа данных: {e}')
 
 if __name__ == '__main__':
-    # normalise_users_data()
+    df = normalise_users_data()
     clients_data = read_csv('normalised_clients.csv')
     save_clients(clients_data)
