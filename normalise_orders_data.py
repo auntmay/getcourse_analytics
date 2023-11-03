@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_data():
+def get_orders_dataframe_from_sql():
     df = pd.read_csv(r'fake_orders.csv', delimiter=',')
     return df
 
@@ -40,18 +40,18 @@ def correct_dates(df):
     return df
 
 
-def to_result_csv(df):
+def result_to_csv(df):
     df.to_csv(r'normalised_orders.csv', index=False, header=False)
 
 
-def normalise_orders_data():
+def normalize_orders_data():
 
-    df = get_data()
+    df = get_orders_dataframe_from_sql()
     df = delete_unnecessary_columns(df)
     df = rename_columns(df)
     df = correct_dates(df)
-    to_result_csv(df)
+    result_to_csv(df)
 
 
 if __name__ == '__main__':
-    normalise_orders_data()
+    normalize_orders_data()

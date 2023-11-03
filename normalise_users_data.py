@@ -43,7 +43,7 @@ def to_result_csv(df):
     df.to_csv(r'normalised_clients.csv', index=False, header=False)
 
 
-def normalise_users_data():
+def normalize_users_data():
 
     df = get_data()
     df = delete_unnecessary_columns(df)
@@ -52,6 +52,6 @@ def normalise_users_data():
     to_result_csv(df)
 
 if __name__ == '__main__':
-    normalise_users_data()
+    normalize_users_data()
 
 
