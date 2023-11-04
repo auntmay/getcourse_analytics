@@ -16,7 +16,7 @@
     </div>
     <div class = "row">
         <div class = "col-6">
-            <h2 >Выберете дальнейшее действие</h2>
+            <h2 >Выберите дальнейшее действие</h2>
         </div>
     </div> 
     <div class = "row ">
@@ -31,7 +31,7 @@
     <div class="pt-lg-3">
         <div class = "row">
             <div class = "col-6">
-                <form action = "{{ url_for('main_page.data_analysis') }}" >
+                <form action = "{{ url_for('main_page.data_analysis', period=' ') }}" >
                     <input class="btn btn-light" type="submit" value="Проанализировать данные из базы">
                 </form>
             </div>    

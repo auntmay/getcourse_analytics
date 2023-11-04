@@ -4,10 +4,67 @@
 
 
 <div class = "row">
-    <div class = "col-10">
-        <h1 class="text-center">Раздел в разработке</h1>
+    <div class = "col-12">
+        <h1 class="text-center">Анализ данных</h1>
     </div>    
 </div>
-
+<div class = "row">
+    <div class = "col-6">
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Выберите период
+            </button>
+         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='Y') }}">Год</a>
+            <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='M') }}">Месяц</a>
+            <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='D') }}">День</a>
+        </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    table {
+    width: 100%;
+    border: 1px solid grey;
+    }
+    /* границы ячеек первого ряда таблицы */
+    th {
+    border: 1px solid grey;
+    }
+    /* границы ячеек тела таблицы */
+    td {
+    border: 1px solid grey;
+    }
+</style>  
+<div class = "row">
+    <div class = "col-9">
+        <table>
+            <thead>
+                <tr ALIGN=center>
+                    {% for column in table_columns %}
+                      <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for values in table_values %}
+                    <tr>
+                        {% for value in values %}    
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+  </div>
+</div>
+{% if image_hidden %}
+    <div class = "row">
+        <div class = "col-9">
+            <img src="{{ url_for('static', filename='my_plot.jpg') }}" width=1000>
+        </img>
+    </div>
+{% endif %}
+</div>
 
 {% endblock %}

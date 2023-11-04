@@ -49,9 +49,9 @@ def save_load_errors(num_rows, email):
 
 
 @lru_cache
-def check_if_client_exist(email, num_rows):
+def check_if_client_exist(email, num_rows, current_user_id = 1):
     try:
-        client_id = Client.query.filter(Client.email == email).first().id
+        client_id = Client.query.filter(Client.email == email, Client.user_id == current_user_id).first().id
         return client_id
     except AttributeError:
         print(f'В строке №{num_rows} возникла ошибка. Не существует пользователя с эл. почтой {email}, которому принадлежит заказ')
@@ -59,11 +59,11 @@ def check_if_client_exist(email, num_rows):
         return False
 
 
-def save_orders(prepared_orders_data):
+def save_orders(prepared_orders_data, current_user_id = 1):
     orders_list = []
     for num_rows, row in enumerate(prepared_orders_data, start=1):
-        if check_if_client_exist(row['email'], num_rows):
-            order = {'email':row['email'], 'client_id': check_if_client_exist(row['email'], num_rows), 'date_created':row['date_created'],
+        if check_if_client_exist(row['email'], num_rows, current_user_id):
+            order = {'email':row['email'], 'client_id': check_if_client_exist(row['email'], num_rows, current_user_id), 'date_created':row['date_created'],
                 'date_closed':row['date_closed'], 'title':row['title'], 'status':row['status'],
                 'amount':row['amount'], 'tax':row['tax'], 'earned':row['earned'],
                 'currency':row['currency'], 'manager':row['manager'], 'partner_id':row['partner_id'],

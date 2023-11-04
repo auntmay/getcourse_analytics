@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 lproj/
 settings.py
+config.py
 
 # C extensions
 *.so
