@@ -44,8 +44,8 @@ def merge_empty_df_with_results(df_corrected, empty_df):
     return result_df
 
 def create_result_df():
-    data = get_orders_data()
-    corrected_data = correct_data(data)
+    orders_sql_data = get_orders_data()
+    corrected_data = correct_data(orders_sql_data)
     empty_df = create_empty_df(corrected_data)
     result_df = merge_empty_df_with_results(corrected_data, empty_df)
     return result_df

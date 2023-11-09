@@ -1,5 +1,6 @@
-from get_orders_sql import create_result_df
-
+import pandas as pd
+from get_orders_table import create_result_df
+from get_expenses_table import get_expenses_table
 
 def get_period():
     period = str(input('Введите разбивку для результирующей таблицы (Y-год, M-месяц, D-день)'))
@@ -14,11 +15,20 @@ def add_columns(df):
     return df
 
 
+def merge_orders_with_expenses(df1, df2):
+    result = pd.merge(df1, df2, left_index=True, right_index=True)
+    return result
+
+
 def get_analysed_data():
-    df = create_result_df()
+    df_orders = create_result_df()
+    df_expenses = get_expenses_table()
     period = get_period()
+
+    df = merge_orders_with_expenses(df_orders, df_expenses)
     df = df.groupby(df.index.to_period(period)).sum()
     df = add_columns(df)
+
     return df
 
 

@@ -66,6 +66,20 @@ class Order(Base):
     
     def __repr__(self):
         return f'Order id: {self.id}, name: {self.title}, amount: {self.amount}, status: {self.status}'
+    
+
+
+class Expens(Base):
+    __tablename__ = 'expenses'
+    
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
+
+    date = Column(Date, primary_key=True)
+    spend = Column(String)
+    currency = Column(String)
+    
+    def __repr__(self):
+        return f'За {self.date} пользователь потратил {self.spend}'
 
 
 if __name__ == '__main__':
