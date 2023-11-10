@@ -1,4 +1,5 @@
-import webapp.config as settings
+#import webapp.config as settings
+import settings
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base

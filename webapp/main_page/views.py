@@ -3,6 +3,7 @@ from flask import Blueprint, current_app, render_template, Flask, flash, request
 import matplotlib.pyplot as plt
 from webapp.user.decorators import user_required
 from webapp.config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER 
+from get_orders_sql import delete_orders_data
 from get_plots_and_tables import get_analysed_data
 from normalise_users_data import normalise_users_data
 from normalise_orders_data import normalise_orders_data
@@ -36,6 +37,7 @@ def data_analysis_add_data():
     save_orders(orders_data, current_user_id)
     return render_template("main/data_analysis.html")
 
+
 @blueprint.route('/data_analysis/<string:period>')
 @user_required
 def data_analysis(period='M'):
@@ -66,13 +68,17 @@ def data_analysis(period='M'):
         return render_template("main/data_analysis.html")  
     
 
-@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/<int:delete>', methods=['GET', 'POST'])
 @user_required
-def upload_file():
+def upload_file(delete=0):
+    if delete == 1:
+        current_user_id = current_user.get_id()
+        delete_orders_data(current_user_id)
+        flash('Записи в базе данных удалены')   
     flag = 0
     if request.method == 'POST':
         if 'file_1' not in request.files or 'file_2' not in request.files:
-            flash('No file part')
+            flash('Недопустимый формат файла')
             return redirect(request.url)
         
         file_users = request.files['file_1']

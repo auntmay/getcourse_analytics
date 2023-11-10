@@ -1,9 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-#from models import Order, Client
+from models import Order, Client
 from db import engine
 import pandas as pd
-import matplotlib.pyplot as plt
+from db import db_session
 
 
 def get_orders_data(current_user_id = 1):
@@ -15,6 +15,13 @@ def get_orders_data(current_user_id = 1):
     client_id = ', '.join(str(id) for id in client_id)
     df = pd.read_sql('''SELECT * FROM orders where client_id IN ({})'''.format(client_id), con=engine)
     return df
+
+
+def delete_orders_data(current_user_id = 1):
+    for users_id in Client.query.filter(Client.user_id == current_user_id):
+        Order.query.filter(Order.client_id == users_id.id).delete()
+    Client.query.filter(Client.user_id == current_user_id).delete()
+    db_session.commit()
 
 
 def correct_data(df):
@@ -57,4 +64,5 @@ def create_result_df():
     return result_df
     
 if __name__ == '__main__':
-    get_orders_data(1)
+    #get_orders_data(1)
+    delete_orders_data(2)
