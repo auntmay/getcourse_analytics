@@ -20,12 +20,18 @@ def merge_orders_with_expenses(df1, df2):
     return result
 
 
+def correct_collumns(df):
+    df['spend'] = df['spend'].astype('int64')
+    return df
+
+
 def get_analysed_data():
     df_orders = create_result_df()
     df_expenses = get_expenses_table()
     period = get_period()
-
+    
     df = merge_orders_with_expenses(df_orders, df_expenses)
+    df = correct_collumns(df)
     df = df.groupby(df.index.to_period(period)).sum()
     df = add_columns(df)
 
