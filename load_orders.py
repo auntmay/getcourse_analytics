@@ -70,7 +70,6 @@ def save_orders(prepared_orders_data, current_user_id = 1):
                 'utm_source':row['utm_source'], 'utm_medium':row['utm_medium'], 'utm_campaign':row['utm_campaign'],
                 'utm_content':row['utm_content'], 'utm_term':row['utm_term'], 'tags':row['tags']}
             orders_list.append(order) 
-        #print(num_rows)
     try:
         db_session.bulk_insert_mappings(Order, orders_list)
         db_session.commit()

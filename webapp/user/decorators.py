@@ -12,10 +12,6 @@ def user_required(func):
         elif current_app.config.get('LOGIN_DISABLED'):
             return func(*args, **kwargs)
         elif not current_user.is_authenticated:
-            #return redirect(url_for('user.login'))
             return render_template("user/unauthenticated.html")
-        #elif not current_user.is_admin:
-        #    flash('Эта страница доступна только админам')
-        #    return redirect(url_for('news.index'))
         return func(*args, **kwargs)
     return decorated_view

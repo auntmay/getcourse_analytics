@@ -1,10 +1,7 @@
 from datetime import timedelta
 import os
 
-
 basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))     #Путь до текущей папки
-
-
 
 SQLALCHEMY_DATABASE_URI ='sqlite:///' + os.path.join(basedir, 'webapp2.db')        #Объединяет указаное имя с путем   
 SQLALCHEMY_TRACK_MODIFICATIONS = False

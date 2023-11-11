@@ -13,7 +13,6 @@ class User(Base, UserMixin):
     role = Column(String)
     email = Column(String)
 
-
     def set_password(self, password):
         self.password = generate_password_hash(password) 
     def check_password(self, password):
@@ -79,6 +78,20 @@ class Order(Base):
     def __repr__(self):
         return f'Order id: {self.id}, name: {self.title}, amount: {self.amount}, status: {self.status}'
 
+
+class Expens(Base):
+    __tablename__ = 'expenses'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
+    date = Column(Date)
+    spend = Column(String)
+    currency = Column(String)
+
+    users = relationship("User", lazy='joined', viewonly=True)
+    
+    def __repr__(self):
+        return f'За {self.date} пользователь потратил {self.spend}'
 
 if __name__ == '__main__':
     Base.metadata.create_all(bind=engine)

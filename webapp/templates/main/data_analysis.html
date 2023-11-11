@@ -2,31 +2,59 @@
 
 {% block content %}
 
-
+<div class = "row">
+    <div class = "col-12">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-warning" role="alert">
+                {% for message in messages %}
+                   {{ message }}<br>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        <h1 class="text-center">{{ page_title }}</h1>
+    </div>
+</div> 
 <div class = "row">
     <div class = "col-12">
         <h1 class="text-center">Анализ данных</h1>
     </div>    
 </div>
-<div class = "row">
+<div class = "row justify-content-center">
     <div class = "col-3">
         <div class="dropdown">
             <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             Выберите период
+                Выберите период
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='Y') }}">Год</a>
                 <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='M') }}">Месяц</a>
                 <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='D') }}">День</a>
+                <a class="dropdown-item" href="{{ url_for('main_page.data_analysis', period='R') }}">В диапазоне</a>
             </div>
         </div>
     </div>
-    <div class = "col-3">
-        <input type="date" value="2023-11-09"  min="2023-01-01" max="2023-12-31"/>
-    </div>
-    <div class = "col-3">
-        <input type="date" value="2023-11-09"  min="2023-01-01" max="2023-12-31"/>
-    </div>
+    {% if range_hidden %} 
+    <form action = "{{ url_for('main_page.data_analysis_range') }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class = "col-3">
+            <div class="form-group">
+                {{ form.event_start.label }}
+                {{ form.event_start() }}
+            </div>
+        </div>
+        <div class = "col-3">
+            <div class="form-group">
+                {{ form.event_end.label }}  <br>
+                {{ form.event_end() }}
+            </div>
+        </div>
+        <div class = "col-3">
+            {{ form.submit() }}
+        </div>
+    </form>
+    {% endif %}
 </div>
 <style type="text/css">
     table {
@@ -41,9 +69,10 @@
     td {
     border: 1px solid grey;
     }
-</style>  
+</style> 
+<div class='d-flex justify-content-center'>
 <div class = "row">
-    <div class = "col-9">
+    <div class = "col-12">
         <table>
             <thead>
                 <tr ALIGN=center>
@@ -64,12 +93,16 @@
         </table>
   </div>
 </div>
+</div>
 {% if image_hidden %}
-    <div class = "row">
-        <div class = "col-9">
-            <img src="{{ url_for('static', filename='my_plot.jpg') }}" width=1000>
+<div class='d-flex justify-content-center'>
+<div class = "row">
+    <div class = "col-10">
+        <img src="{{ url_for('static', filename='my_plot.jpg') }}" width=900>
         </img>
     </div>
+</div>
+</div>
 {% endif %}
 
 
