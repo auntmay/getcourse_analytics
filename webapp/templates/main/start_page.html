@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class = "row">
+        <div class = "col-6">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                       {{ message }}<br>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class = "row">
+        <div class = "col-6">
+            <h2 >Выберите дальнейшее действие</h2>
+        </div>
+    </div> 
+    <div class = "row ">
+        <div class="pt-lg-3">
+            <div class = "col-6">
+                <form action = "{{ url_for('main_page.upload_file', delete=0) }}" >
+                    <input class="btn btn-light" type="submit" value="Добавить файлы">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="pt-lg-3">
+        <div class = "row">
+            <div class = "col-6">
+                <form action = "{{ url_for('main_page.data_analysis', period=' ') }}" >
+                    <input class="btn btn-light" type="submit" value="Проанализировать данные из базы">
+                </form>
+            </div>    
+        </div>
+    </div>
+    <div class="pt-lg-3">
+        <div class = "row">
+            <div class = "col-6">
+                <form action = "{{  url_for('main_page.upload_file', delete=1) }}" >
+                    <input class="btn btn-light" type="submit" value="Очистить базу данных">
+                </form>
+            </div>    
+        </div>
+    </div>
+{% endblock %}
