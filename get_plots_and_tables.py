@@ -19,7 +19,6 @@ def merge_orders_with_expenses(df1, df2):
     df1.index=df1.index.astype('datetime64[ns]')
     df2.index=df2.index.astype('datetime64[ns]')
     result = pd.merge(df1, df2, left_index=True, right_index=True)
-    print(result)
     return result
 
 
